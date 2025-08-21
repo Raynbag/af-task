@@ -1,0 +1,23 @@
+{{- if .Values.serviceMonitor.create -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "infrabin.labels" . | nindent 4 }}
+    prometheus: stack
+  name: {{ include "infrabin.fullname" . }}
+  namespace: prometheus
+spec:
+  endpoints:
+  - honorLabels: true
+    path: /metrics
+    port: http
+    scheme: http
+    scrapeTimeout: 30s
+  selector:
+    matchLabels:
+      {{- include "infrabin.labels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+    - infrabin
+{{- end }}

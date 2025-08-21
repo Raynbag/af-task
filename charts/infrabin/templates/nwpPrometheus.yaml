@@ -1,0 +1,21 @@
+{{- if .Values.nwpPrometheus.create -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "infrabin.fullname" . }}-prometheus
+  namespace: {{ .Values.Namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "infrabin.selectorLabels" . | nindent 8 }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          infrabin-connection: "true"
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/instance: prometheus
+{{- end }}

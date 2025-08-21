@@ -1,0 +1,16 @@
+minikube addons enable ingress
+
+k apply -f k8s-resources/ns.yaml
+
+helm install prometheus -n prometheus oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack --values=helm-values/prometheus.yaml
+
+helm install istio-base istio/base -n istio-system --set defaultRevision=default
+
+helm install istiod istio/istiod -n istio-system --wait
+
+helm install infrabin -n infrabin charts/infrabin/
+
+k port-forward service/infrabin 1337:80 -n infrabin
+
+kubectl port-forward service/prometheus-kube-prometheus-prometheus 1337:9090 -n prometheus
+
