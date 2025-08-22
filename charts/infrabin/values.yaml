@@ -59,10 +59,10 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-nwpPrometheus:
+netpolPrometheus:
   create: true
 
-nwpIngress:
+netpolIngress:
   create: true
 
 resources: {}
