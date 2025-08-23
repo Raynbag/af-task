@@ -1,14 +1,22 @@
 minikube addons enable ingress
 
+minikube addons enable ingress-dns
+
 k apply -f k8s-resources/ns.yaml
 
 helm install prometheus -n prometheus oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack --values=helm-values/prometheus.yaml
+
+kubectl patch ds prometheus-prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]' -n prometheus
 
 helm install istio-base istio/base -n istio-system --set defaultRevision=default
 
 helm install istiod istio/istiod -n istio-system --wait
 
+helm install ingress-nginx -n ingress-nginx ingress-nginx/ingress-nginx --values=helm-values/ingress-nginx.yaml
+
 helm install infrabin -n infrabin charts/infrabin/
+
+C:\Windows\System32\drivers\etc>notepad hosts
 
 k port-forward service/infrabin 1337:80 -n infrabin
 

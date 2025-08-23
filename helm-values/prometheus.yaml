@@ -3704,9 +3704,9 @@ prometheus:
   #     someoneelse:$apr1$DMZX2Z4q$6SbQIfyuLQd.xmo/P0m2c.
 
   ingress:
-    enabled: false
+    enabled: true
 
-    ingressClassName: ""
+    ingressClassName: "nginx"
 
     annotations: {}
     labels: {}
@@ -3719,7 +3719,8 @@ prometheus:
     ##
     # hosts:
     #   - prometheus.domain.com
-    hosts: []
+    hosts: 
+    - prometheus.example
 
     ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
     ##
